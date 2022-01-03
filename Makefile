@@ -1,0 +1,14 @@
+up:
+	docker-compose up
+
+down:
+	docker-compose down
+
+app:
+	docker-compose exec app sh
+
+config-c:
+	docker-compose exec app php artisan config:clear
+
+cache-c:
+	docker-compose exec app php artisan cache:clear
