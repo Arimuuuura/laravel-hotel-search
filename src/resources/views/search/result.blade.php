@@ -14,15 +14,7 @@
                         <div class="lg:flex lg:justify-around">
                             <div class="lg:flex items-center">
                                 <div class="flex space-x-2 items-center">
-                                    <select name="middle" id="middle" class="mb-2 lg:mb-0 lg:mr-2">
-                                        <optgroup label="都道府県を選択">
-                                        @foreach($areas as $area)
-                                            <option value="{{ $area["middleClass"][0]["middleClassCode"] }}">
-                                                {{ $area["middleClass"][0]["middleClassName"] }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-{{--                                    <div><input name="keyword" type="text" placeholder="Keyword" class="border border-gray-500 py-2"></div>--}}
+                                    <x-search.select :areas="$areas" />
                                     <div><button type="submit" class="ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">検索する</button></div>
                                 </div>
                             </div>

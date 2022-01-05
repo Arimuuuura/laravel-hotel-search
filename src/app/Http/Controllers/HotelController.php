@@ -49,6 +49,7 @@ class HotelController extends Controller
         $areaPosts = json_decode($areaPosts, true);
         $areas = $areaPosts["areaClasses"]["largeClasses"][0]["largeClass"][1]["middleClasses"];
 
+//        dd($areas);
         return view('search.result', compact('hotels', 'areas'));
     }
 
