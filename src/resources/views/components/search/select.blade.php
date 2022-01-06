@@ -12,35 +12,59 @@
         </option>
     @endforeach
 </select>
-<select name="small" id="small" class="mb-2 lg:mb-0 lg:mr-2">
-</select>
+<select name="small" id="small" class="mb-2 lg:mb-0 lg:mr-2"></select>
 
 <script>
-    const middle = document.getElementById('middle');
-    const small = document.getElementById('small');
-    middle.addEventListener('change', (e) => {
-        const middleArea = e.target.value;
-        const areas = <?php echo $areasJson ?>;
-        console.log(middleArea)
-        areas.forEach(element => {
-            const middleCode = element["middleClass"][0]["middleClassCode"];
-            const smalls = element["middleClass"][1]["smallClasses"];
-            if(middleArea === middleCode){
-                const optgroup = document.createElement('optgroup');
-                optgroup.label = "地域を選択";
-                small.appendChild(optgroup);
-                createOption(smalls);
-            }
-        });
-    })
-    const createOption = smalls => {
-        smalls.forEach(element => {
-            const smallCode = element["smallClass"][0]["smallClassCode"];
-            const smallName = element["smallClass"][0]["smallClassName"];
+    'use strict';
+    {
+        const middle = document.getElementById('middle');
+        const small = document.getElementById('small');
+
+        const createOptions = smalls => {
+            smalls.forEach(element => {
+                const smallCode = element["smallClass"][0]["smallClassCode"];
+                const smallName = element["smallClass"][0]["smallClassName"];
+                createOption(smallCode, smallName);
+            });
+        };
+
+        const createOption = (smallCode, smallName) => {
             const option = document.createElement('option');
             option.value = smallCode;
             option.innerHTML = smallName;
+            option.classList.add('option');
             small.appendChild(option);
+        };
+
+        const createOptgroup = () => {
+            const optgroup = document.createElement('optgroup');
+            optgroup.label = "地域を選択";
+            small.appendChild(optgroup);
+        };
+
+        const removeOption = () => {
+            const option = document.getElementsByClassName('option');
+            if(option.length) {
+                Array.from(option).forEach(node => small.removeChild(node));
+            }
+        };
+
+        createOptgroup();
+        createOption(0, "未選択");
+
+        middle.addEventListener('change', (e) => {
+            // const small = document.getElementById('small');
+            const middleArea = e.target.value;
+            const areas = <?php echo $areasJson ?>;
+            removeOption(small);
+
+            areas.forEach(element => {
+                const middleCode = element["middleClass"][0]["middleClassCode"];
+                const smalls = element["middleClass"][1]["smallClasses"];
+                if(middleArea === middleCode){
+                    createOptions(smalls);
+                }
+            });
         });
     }
 </script>

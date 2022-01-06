@@ -25,7 +25,7 @@ Route::get('/dashboard', function () {
 Route::get('result', [HotelController::class, 'index'])
     ->middleware(['auth'])->name('hotel.index');
 
-Route::post('result/{query}', [HotelController::class, 'getArea'])
+Route::post('result', [HotelController::class, 'getArea'])
     ->middleware(['auth'])->name('hotel.getArea');
 
 require __DIR__.'/auth.php';
