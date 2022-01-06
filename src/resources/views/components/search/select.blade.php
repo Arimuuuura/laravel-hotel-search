@@ -1,5 +1,6 @@
 @php
     $areasJson = json_encode($areas);
+    $small = !is_null(\Request::get("small")) ? \Request::get("small") : false;
 @endphp
 <select name="middle" id="middle" class="mb-2 lg:mb-0 lg:mr-2">
     <optgroup label="都道府県を選択">
@@ -7,7 +8,7 @@
             未選択
         </option>
     @foreach($areas as $area)
-        <option value="{{ $area["middleClass"][0]["middleClassCode"] }}">
+        <option value="{{ $area["middleClass"][0]["middleClassCode"] }}" @if(\Request::get("middle") === $area["middleClass"][0]["middleClassCode"]) selected @endif>
             {{ $area["middleClass"][0]["middleClassName"] }}
         </option>
     @endforeach
@@ -19,6 +20,7 @@
     {
         const middle = document.getElementById('middle');
         const small = document.getElementById('small');
+        const smallEx = "<?= $small ?>";
 
         const createOptions = smalls => {
             smalls.forEach(element => {
@@ -33,6 +35,7 @@
             option.value = smallCode;
             option.innerHTML = smallName;
             option.classList.add('option');
+            option.selected = smallEx === smallCode && true;
             small.appendChild(option);
         };
 
@@ -49,12 +52,9 @@
             }
         };
 
-        createOptgroup();
-        createOption(0, "未選択");
-
-        middle.addEventListener('change', (e) => {
-            const middleArea = e.target.value;
-            const areas = <?php echo $areasJson ?>;
+        const createSmallSelects = value => {
+            const middleArea = value;
+            const areas = <?= $areasJson ?>;
             removeOption(small);
 
             areas.forEach(element => {
@@ -64,6 +64,17 @@
                     createOptions(smalls);
                 }
             });
+        }
+
+        createOptgroup();
+        createOption(0, "未選択");
+
+        // selectbox の値がすでに存在した場合の処理
+        middle.value && createSmallSelects(middle.value);
+
+        // selectbox が変更された際のイベント
+        middle.addEventListener('change', (e) => {
+            createSmallSelects(e.target.value);
         });
     }
 </script>
