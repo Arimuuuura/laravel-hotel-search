@@ -9,75 +9,65 @@ class HotelController extends Controller
 {
     public function __construct()
     {
-    }
-
-    public function search(Request $request)
-    {
-//        $keyword = $request->input('keyword');
-//        dd($keyword);
+        $this->middleware('auth');
     }
 
     public function index(Request $request)
     {
-//        if (!is_null($request)){
-//            $keyword = $request->input('keyword');
-//        }
-//        $apiUrl = env('SIMPLE_HOTEL_SEARCH_URL');
-//        $appId = env('APPLICATION_ID');
-//        $format = env('FORMAT');
-//        $largeClass = env('LARGE_CLASS_CODE');
-//        $middleClass = $keyword;
-//        $smallClass = $keyword;
-//
-//        $url = "{$apiUrl}?applicationId={$appId}&format={$format}&largeClassCode={$largeClass}&middleClassCode={$middleClass}";
+        $hotels = empty($request->query()) ? null : $this->getHotels($request);
+        $areas = $this->getAreas();
 
-        $searchUrl = "https://app.rakuten.co.jp/services/api/Travel/SimpleHotelSearch/20170426?applicationId=1051466363713368918&format=json&largeClassCode=japan&middleClassCode=akita&smallClassCode=tazawa";
-        $areaUrl = "https://app.rakuten.co.jp/services/api/Travel/GetAreaClass/20131024?applicationId=1051466363713368918&format=json";
-        $method = "GET";
-
-        //接続
-        $client = new Client();
-
-        $searchResponse = $client->request($method, $searchUrl);
-        $areaResponse = $client->request($method, $areaUrl);
-
-        $searchPosts = $searchResponse->getBody();
-        $searchPosts = json_decode($searchPosts, true);
-        $hotels = $searchPosts["hotels"];
-
-        $areaPosts = $areaResponse->getBody();
-        $areaPosts = json_decode($areaPosts, true);
-        $areas = $areaPosts["areaClasses"]["largeClasses"][0]["largeClass"][1]["middleClasses"];
-
-//        dd($areas);
-        return view('search.result', compact('hotels', 'areas'));
+        return view('search.search', compact('hotels', 'areas'));
     }
 
-    public function getArea(Request $request)
+    public function getHotels($request)
     {
-        dd($request);
-        if (!is_null($request)){
-            $keyword = $request->input('keyword');
-        }
-        $apiUrl = env('SIMPLE_HOTEL_SEARCH_URL');
-        $appId = env('APPLICATION_ID');
-        $format = env('FORMAT');
-        $largeClass = env('LARGE_CLASS_CODE');
-        $middleClass = $keyword;
-        $smallClass = $keyword;
+        return $this->getData(
+            env('SIMPLE_HOTEL_SEARCH_URL'),
+            env('APPLICATION_ID'),
+            env('FORMAT'),
+            env('LARGE_CLASS_CODE'),
+            $request,
+        );
+    }
 
-        $url = "{$apiUrl}?applicationId={$appId}&format={$format}&largeClassCode={$largeClass}&middleClassCode={$middleClass}";
+    public function getAreas()
+    {
+        return $this->getData(
+            env('AREA_URL'),
+            env('APPLICATION_ID'),
+            env('FORMAT'),
+            null,
+            null,
+        );
+    }
+
+    public function getData($URL, $ID, $FORMAT, $L_CLASS, $request)
+    {
+        $apiUrl = $URL;
+        $appId = $ID;
+        $format = $FORMAT;
+        $largeClass = $L_CLASS;
         $method = "GET";
+        $isArea = fn($request) => is_null($request) ? true : false;
+
+        if ($isArea($request)) {
+            $url = "{$apiUrl}?applicationId={$appId}&format={$format}";
+        } else {
+            $middleClass = $request->query('middle');
+            $smallClass = $request->query('small');
+            $url = "{$apiUrl}?applicationId={$appId}&format={$format}&largeClassCode={$largeClass}&middleClassCode={$middleClass}&smallClassCode={$smallClass}";
+        }
 
         //接続
         $client = new Client();
+        $response = $client->request($method, $url);
+        $posts = $response->getBody();
+        $posts = json_decode($posts, true);
+        $data = $isArea($request) ?
+            $posts["areaClasses"]["largeClasses"][0]["largeClass"][1]["middleClasses"] :
+            $posts["hotels"];
 
-        $searchResponse = $client->request($method, $searchUrl);
-
-        $searchPosts = $searchResponse->getBody();
-        $searchPosts = json_decode($searchPosts, true);
-        $hotels = $searchPosts["hotels"];
-
-        return view('search.result', compact('hotels'));
+        return $data;
     }
 }

@@ -22,10 +22,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('result', [HotelController::class, 'index'])
-    ->middleware(['auth'])->name('hotel.index');
-
-Route::post('result', [HotelController::class, 'getArea'])
-    ->middleware(['auth'])->name('hotel.getArea');
+Route::get('search', [HotelController::class, 'index'])
+    ->middleware(['auth'])->name('hotel.search');
 
 require __DIR__.'/auth.php';
