@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\HotelSearchController;
+use App\Http\Controllers\HotelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +22,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('result', [HotelSearchController::class, 'index'])
-    ->middleware(['auth'])->name('search.result');
+Route::get('search', [HotelController::class, 'index'])
+    ->middleware(['auth'])->name('hotel.search');
 
 require __DIR__.'/auth.php';
