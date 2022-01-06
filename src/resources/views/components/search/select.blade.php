@@ -53,7 +53,6 @@
         createOption(0, "未選択");
 
         middle.addEventListener('change', (e) => {
-            // const small = document.getElementById('small');
             const middleArea = e.target.value;
             const areas = <?php echo $areasJson ?>;
             removeOption(small);
