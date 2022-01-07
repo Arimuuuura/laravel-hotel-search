@@ -14,4 +14,4 @@ cache-c:
 	docker-compose exec app php artisan cache:clear
 
 run-dev:
-    docker-compose exec app npm run dev
+	docker-compose exec app npm run dev
