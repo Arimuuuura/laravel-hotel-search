@@ -97,6 +97,7 @@
             }
         };
 
+        // @TODO ループ処理を共通化したい
         const classes = areas.map(val => {
             const {middleClass} = val;
             const [{middleClassCode, middleClassName}] = middleClass;
@@ -138,6 +139,7 @@
             });
         }
 
+        // @TODO 都市選択状態から未選択を選択した時活性化が保持される
         const isActivationButton = flag => {
             if (flag) {
                 searchButton.disabled = flag;
