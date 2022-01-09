@@ -21,7 +21,3 @@ echo "<-- finish install npm -->"
 echo "<-- start npm compile -->"
 npm run dev
 echo "<-- finish npm compile -->"
-
-echo "<-- start Tailwind purge -->"
-npm run prod
-echo "<-- finish Tailwind purge -->"

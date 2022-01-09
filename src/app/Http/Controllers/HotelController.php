@@ -49,14 +49,15 @@ class HotelController extends Controller
         $format = $FORMAT;
         $largeClass = $L_CLASS;
         $method = "GET";
-        $isArea = fn($request) => is_null($request) ? true : false;
+        $isArea = fn($request) => is_null($request) && true;
 
         if ($isArea($request)) {
             $url = "{$apiUrl}?applicationId={$appId}&format={$format}";
         } else {
-            $middleClass = $request->query('middle');
-            $smallClass = $request->query('small');
-            $url = "{$apiUrl}?applicationId={$appId}&format={$format}&largeClassCode={$largeClass}&middleClassCode={$middleClass}&smallClassCode={$smallClass}";
+            $middleClass = "&middleClassCode={$request->query('middle')}";
+            $smallClass = "&smallClassCode={$request->query('small')}";
+            $detailClass = $request->query('detail') ? "&detailClassCode={$request->query('detail')}" : null;
+            $url = "{$apiUrl}?applicationId={$appId}&format={$format}&largeClassCode={$largeClass}{$middleClass}{$smallClass}{$detailClass}";
         }
 
         //接続
