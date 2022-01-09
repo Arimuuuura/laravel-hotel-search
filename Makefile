@@ -15,3 +15,7 @@ cache-c:
 
 run-dev:
 	docker-compose exec app npm run dev
+
+# 本番用にビルド
+prod:
+	docker-compose exec app npm run prod
