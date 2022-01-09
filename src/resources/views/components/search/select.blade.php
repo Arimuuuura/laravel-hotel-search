@@ -11,7 +11,7 @@
                     <span class="mr-3 text-xs text-gray-500">都道府県を選択</span>
                     <div class="relative">
                         <!--suppress HtmlFormInputWithoutLabel -->
-                        <select name="middle" id="middle" class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                        <select name="middle" id="middle" class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-sm pl-3 pr-10">
                             <!--suppress CheckEmptyScriptTag -->
                             <optgroup label="都道府県を選択" />
                             <option value="">
@@ -34,7 +34,7 @@
                     <span class="mr-3 text-xs text-gray-500">エリアを選択</span>
                     <div class="relative">
                         <!--suppress HtmlFormInputWithoutLabel -->
-                        <select name="small" id="small" disabled class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                        <select name="small" id="small" disabled class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-sm pl-3 pr-10">
                         </select>
                         <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
@@ -47,7 +47,7 @@
                     <span class="mr-3 text-xs text-gray-500">詳細エリア</span>
                     <div class="relative">
                         <!--suppress HtmlFormInputWithoutLabel -->
-                        <select name="detail" id="detail" disabled class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-base pl-3 pr-10">
+                        <select name="detail" id="detail" disabled class="text-gray-700 rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 text-sm pl-3 pr-10">
                         </select>
                         <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                             <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
@@ -56,7 +56,9 @@
                         </span>
                     </div>
                 </div>
-                <div><button id="hotel-search" type="submit" disabled class="ml-auto text-white bg-gray-300 border-0 py-2 px-6 focus:outline-none rounded">検索する</button></div>
+                <div class="pt-6">
+                    <button id="hotel-search" type="submit" disabled class="ml-auto text-white bg-gray-300 border-0 py-2 px-6 focus:outline-none rounded">検索する</button>
+                </div>
             </div>
         </div>
     </div>
@@ -157,6 +159,7 @@
         // selectbox の値がすでに存在した場合の処理
         middle.value && createSmallSelects(middle.value);
         small.value && createDetailSelects(small.value);
+        detail.disabled = detail.length <= 1;
 
         // selectbox middle が変更された際のイベント
         middle.addEventListener('change', e => {
