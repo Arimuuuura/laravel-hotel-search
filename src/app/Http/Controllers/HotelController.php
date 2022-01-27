@@ -15,9 +15,7 @@ class HotelController extends Controller
         $this->middleware('auth');
 
         $this->middleware(function($request, $next) {
-//            dd($request, $next);
-            $id = $request->route()->parameter('hotel');
-            $info = $next;
+            $this->id = $request->route()->parameter('hotel');
 //            if (!is_null($id)) {
 //                $itemId = Product::availableItems()->where('products.id', $id)->exists();
 //                if (!$itemId) {
@@ -36,8 +34,10 @@ class HotelController extends Controller
         return view('search.search', compact('hotels', 'areas'));
     }
 
-    public function show($id, $info)
+    public function show(Request $request)
     {
-        dd($id, $info);
+        $detail = $request->all();
+
+        return view('search.show', compact('detail'));
     }
 }

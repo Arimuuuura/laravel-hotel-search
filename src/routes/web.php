@@ -25,4 +25,7 @@ Route::get('/dashboard', function () {
 Route::get('search', [HotelController::class, 'index'])
     ->middleware(['auth'])->name('hotel.search');
 
+Route::post('search/show', [HotelController::class, 'show'])
+    ->middleware(['auth'])->name('hotel.show');
+
 require __DIR__.'/auth.php';
